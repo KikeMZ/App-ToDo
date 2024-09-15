@@ -10168,14 +10168,9 @@ a:focus {
   vertical-align: 0;
   border: 0;
   font-weight: 900;
-  content: '\f105';
-  font-family: 'Font Awesome 5 Free';
 }
 
-.sidebar .nav-item.dropdown.show .dropdown-toggle::after,
-.topbar .nav-item.dropdown.show .dropdown-toggle::after {
-  content: '\f107';
-}
+
 
 .sidebar .nav-item .nav-link,
 .topbar .nav-item .nav-link {
@@ -10448,13 +10443,6 @@ a:focus {
   cursor: pointer;
 }
 
-.sidebar #sidebarToggle::after {
-  font-weight: 900;
-  content: '\f104';
-  font-family: 'Font Awesome 5 Free';
-  margin-right: 0.1rem;
-}
-
 .sidebar #sidebarToggle:hover {
   text-decoration: none;
 }
@@ -10468,11 +10456,6 @@ a:focus {
   overflow: hidden;
 }
 
-.sidebar.toggled #sidebarToggle::after {
-  content: '\f105';
-  font-family: 'Font Awesome 5 Free';
-  margin-left: 0.25rem;
-}
 
 .sidebar.toggled .sidebar-card {
   display: none;
@@ -10583,12 +10566,8 @@ a:focus {
     vertical-align: 0;
     border: 0;
     font-weight: 900;
-    content: '\f107';
-    font-family: 'Font Awesome 5 Free';
   }
-  .sidebar .nav-item .nav-link[data-toggle="collapse"].collapsed::after {
-    content: '\f105';
-  }
+
   .sidebar .sidebar-brand .sidebar-brand-icon i {
     font-size: 2rem;
   }
@@ -10841,8 +10820,6 @@ a:focus {
   padding-right: 1.725rem;
   line-height: 51px;
   font-weight: 900;
-  content: '\f107';
-  font-family: 'Font Awesome 5 Free';
   color: #d1d3e2;
 }
 
@@ -10850,9 +10827,6 @@ a:focus {
   border-radius: 0.35rem;
 }
 
-.card .card-header[data-toggle="collapse"].collapsed::after {
-  content: '\f105';
-}
 
 .chart-area {
   position: relative;
