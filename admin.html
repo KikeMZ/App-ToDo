@@ -1,3 +1,13 @@
+<?php 
+  session_start();
+
+  if (!isset($_SESSION['user_id'])) {
+      // Si no está logueado, redirigir al login
+      header('Location: login.html');
+      exit();
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,10 +22,7 @@
 
     <title>ToDo App</title>
 
-    <script
-      src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"></script>
     <link
       href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
       rel="stylesheet"
@@ -23,6 +30,18 @@
 
     <!-- Custom styles for this template-->
     <link href="css/admin.css" rel="stylesheet" />
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="js/jquery.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="js/jquery.easing.min.js"></script>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/lateralBar.js"></script>
+    <script src="js/tareas.js"></script>
   </head>
 
   <body id="page-top">
@@ -111,14 +130,22 @@
           >
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header">Opciones</h6>
-              <a class="collapse-item" href="#" href="#"
-              data-toggle="modal"
-              data-target="#logoutModal">Cerrar Sesión</a>
+              <a
+                class="collapse-item"
+                href="#"
+                href="#"
+                data-toggle="modal"
+                data-target="#logoutModal"
+                >Cerrar Sesión</a
+              >
               <a class="collapse-item" href="info.html">Editar Información</a>
               <div class="collapse-divider"></div>
               <h6 class="collapse-header">Otras opciones</h6>
-              <a class="collapse-item text-danger" href="#" data-toggle="modal"
-              data-target="#eliminarCuenta"
+              <a
+                class="collapse-item text-danger"
+                href="#"
+                data-toggle="modal"
+                data-target="#eliminarCuenta"
                 >Eliminar cuenta</a
               >
             </div>
@@ -298,8 +325,10 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                    >Enrique MZ</span
+                  <span
+                    class="mr-2 d-none d-lg-inline text-gray-600 small"
+                    id="nombreUser"
+                    >USER AB</span
                   >
                   <img class="img-profile rounded-circle" src="img/logo.svg" />
                 </a>
@@ -364,7 +393,10 @@
                         >
                           Número de tareas
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div
+                          class="h5 mb-0 font-weight-bold text-gray-800"
+                          id="numTareas"
+                        >
                           4
                         </div>
                       </div>
@@ -387,7 +419,10 @@
                         >
                           tareas completas
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div
+                          class="h5 mb-0 font-weight-bold text-gray-800"
+                          id="tareasCompletas"
+                        >
                           10
                         </div>
                       </div>
@@ -410,7 +445,10 @@
                         >
                           tareas pendientes
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div
+                          class="h5 mb-0 font-weight-bold text-gray-800"
+                          id="tareasPendientes"
+                        >
                           18
                         </div>
                       </div>
@@ -425,7 +463,7 @@
 
             <!-- Content Row -->
 
-            <div class="row">
+            <div class="row" id="cardsPrint">
               <!-- Pie Chart -->
               <div class="col-xl-4 col-lg-5">
                 <div class="card shadow mb-4">
@@ -453,11 +491,20 @@
                         aria-labelledby="dropdownMenuLink"
                       >
                         <div class="dropdown-header">Opciones</div>
-                        <a class="dropdown-item" href="#" data-toggle="modal"
-                        data-target="#editarTarea">Editar</a>
-                        <a class="dropdown-item text-danger" href="#"
-                        data-toggle="modal"
-                        data-target="#eliminar">Borrar</a>
+                        <a
+                          class="dropdown-item"
+                          href="#"
+                          data-toggle="modal"
+                          data-target="#editarTarea"
+                          >Editar</a
+                        >
+                        <a
+                          class="dropdown-item text-danger"
+                          href="#"
+                          data-toggle="modal"
+                          data-target="#eliminar"
+                          >Borrar</a
+                        >
                       </div>
                     </div>
                   </div>
@@ -530,13 +577,11 @@
             >
               Cancelar
             </button>
-            <a class="btn btn-primary" href="login.html">Cerrar Sesión</a>
+            <a class="btn btn-primary" id="closeSesion">Cerrar Sesión</a>
           </div>
         </div>
       </div>
     </div>
-
-
 
     <div
       class="modal fade"
@@ -546,51 +591,48 @@
       aria-labelledby="nuevaTarea"
       aria-hidden="true"
     >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="nuevaTarea">
-            Crear nueva tarea
-          </h5>
-          <button
-            class="close"
-            type="button"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="nuevaTarea">Crear nueva tarea</h5>
+            <button
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="formNewT">
+              <label for="" class="form-label">Nombre de la tarea:</label>
+              <input type="text" name="nombreT" class="form-control" />
 
-          <form action="#" method="get">
-            <label for="" class="form-label">Nombre de la tarea:</label>
-            <input type="text" class="form-control"/>
+              <label for="" class="form-label">Descripción de la tarea:</label>
+              <input type="text" name="descripcionT" class="form-control" />
 
-            <label for="" class="form-label mt-4">Materia:</label>
-            <input type="text" class="form-control"/>
+              <label for="" class="form-label mt-4">Materia:</label>
+              <input type="text" name="materiaT" class="form-control" />
 
-            <label for="" class="form-label mt-4">Fecha:</label>
-            <input type="date" class="form-control"/>
-          </form>
-
-        </div>
-        <div class="modal-footer">
-          <button
-            class="btn btn-secondary"
-            type="button"
-            data-dismiss="modal"
-          >
-            Cancelar
-          </button>
-          <a class="btn btn-primary" href="admin.html">Crear Tarea</a>
+              <input type="hidden" name="op" value="1" />
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <a class="btn btn-primary" id="btnCrearT">Crear Tarea</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-
-  <div
+    <div
       class="modal fade"
       id="editarTarea"
       tabindex="-1"
@@ -598,51 +640,46 @@
       aria-labelledby="editarTarea"
       aria-hidden="true"
     >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editarTarea">
-            Editar tarea
-          </h5>
-          <button
-            class="close"
-            type="button"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editarTarea">Editar tarea</h5>
+            <button
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="#" method="get">
+              <label for="" class="form-label">Nombre de la tarea:</label>
+              <input type="text" class="form-control" value="Tarea 1" />
 
-          <form action="#" method="get">
-            <label for="" class="form-label">Nombre de la tarea:</label>
-            <input type="text" class="form-control" value="Tarea 1"/>
+              <label for="" class="form-label mt-4">Materia:</label>
+              <input type="text" class="form-control" value="Matemáticas" />
 
-            <label for="" class="form-label mt-4">Materia:</label>
-            <input type="text" class="form-control" value="Matemáticas"/>
-
-            <label for="" class="form-label mt-4">Fecha:</label>
-            <input type="date" class="form-control" value="2024-10-21"/>
-          </form>
-
-        </div>
-        <div class="modal-footer">
-          <button
-            class="btn btn-secondary"
-            type="button"
-            data-dismiss="modal"
-          >
-            Cancelar
-          </button>
-          <a class="btn btn-primary" href="admin.html">Crear Tarea</a>
+              <label for="" class="form-label mt-4">Fecha:</label>
+              <input type="date" class="form-control" value="2024-10-21" />
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <a class="btn btn-primary" href="">Editar Tarea</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-
-  <div
+    <div
       class="modal fade"
       id="eliminar"
       tabindex="-1"
@@ -679,7 +716,6 @@
       </div>
     </div>
 
-
     <div
       class="modal fade"
       id="eliminarCuenta"
@@ -705,7 +741,7 @@
           </div>
           <div class="modal-body">
             <label for="" class="form-label">Ingresa tu contraseña:</label>
-            <input type="text" class="form-control" required/>
+            <input type="text" class="form-control" required />
           </div>
           <div class="modal-footer">
             <button
@@ -721,16 +757,25 @@
       </div>
     </div>
 
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="js/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/lateralBar.js"></script>
-    <script src="js/tareas.js"></script>
+    <div
+      class="toast-container position-fixed top-0 end-0 p-3"
+      style="z-index: 11"
+    >
+      <div
+        id="toastI"
+        class="toast"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="toast-header">
+          <strong class="me-auto" id="toast-title"></strong>
+          <small>Ahora</small>
+        </div>
+        <div class="toast-body" id="toast-body">
+          <!-- Aquí va el mensaje -->
+        </div>
+      </div>
+    </div>    
   </body>
 </html>

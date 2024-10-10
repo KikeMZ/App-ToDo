@@ -1,6 +1,7 @@
 <?php
 
 include "conexionDB.php";
+session_start();
 
 $option = $_POST['option'];
 
@@ -14,6 +15,11 @@ switch ($option) {
     case 2:
         recuperar($conn);
         break;
+    case 3:
+        logout();
+        break;
+    case 4:
+        getUserData($conn);
 
     default:
         # code...
@@ -77,15 +83,16 @@ function login($conn)
         exit();
     }
 
-    $query = $conn->prepare("SELECT pass FROM usuario WHERE email = BINARY ?");
+    $query = $conn->prepare("SELECT id, pass FROM usuario WHERE email = BINARY ?");
     $query->bind_param("s", $email);
     $query->execute();
     $result = $query->get_result();
     $query->close();
 
     if ($result = mysqli_fetch_assoc($result)) {
-        if (password_verify($pass, $result["pass"])) {
-            echo json_encode(['success' => true, 'message' => 'Acceso Concedido']);
+        if (password_verify($pass, $result['pass'])) {
+            $_SESSION['user_id'] = $result['id'];
+            echo json_encode(['success' => true, 'message' => 'Acceso Concedido', 'data' => $result["id"]]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Datos Incorrectos']);
         }
@@ -119,4 +126,30 @@ function recuperar($conn)
     } else {
         echo json_encode(['success' => false, 'message' => 'Datos Incorrectos']);
     }
+}
+
+function logout()
+{
+    session_destroy();
+    echo json_encode(['success' => true, 'message' => '']);
+}
+
+function getUserData($conn)
+{
+    if (isset($_SESSION["user_id"])) {
+        $idUser = $_SESSION['user_id'];
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Error Autenticandose']);
+        exit();
+    }
+
+    $query = $conn->prepare("SELECT nombre, apellidos FROM usuario WHERE id = ?");
+    $query->bind_param("s", $idUser);
+    $query->execute();
+    $result = $query->get_result();
+    $query->close();
+
+    $result = mysqli_fetch_assoc($result);
+
+    echo json_encode(['success' => true, 'message' => $result]);
 }

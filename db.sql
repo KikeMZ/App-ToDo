@@ -13,7 +13,7 @@ create table tareas
     id_user int not null,
     nombre varchar(100) not null,
     descrip varchar(200) not null,
-    fecha date not null,
+    fecha datetime not null,
     materia varchar(100) not null,
     estado int(1) DEFAULT 0 not null,
     CONSTRAINT fk_usuario_tareas FOREIGN KEY (id_user) REFERENCES usuario(id) ON DELETE CASCADE
@@ -22,6 +22,8 @@ create table tareas
 create table historial
 (
 	id int PRIMARY KEY not null AUTO_INCREMENT,
+    id_user int not null,
     accion varchar(100) not null,
-    fecha datetime not null
+    fecha datetime not null,
+    CONSTRAINT fk_usuario_log FOREIGN KEY (id_user) REFERENCES usuario(id) ON DELETE CASCADE
 );
